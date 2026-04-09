@@ -1,0 +1,18 @@
+- name: Instalacion de la API Flask
+  hosts: webserver
+  become: yes
+  tasks:
+    - name: Instalar pip
+      apt:
+        name: python3-pip
+        state: present
+        update_cache: yes
+    - name: Copiar app
+      copy:
+        src: ../app/
+        dest: /home/ubuntu/app/
+    - name: Instalar dependencias
+      pip:
+        requirements: /home/ubuntu/app/requirements.txt
+    - name: Iniciar app
+      shell: "nohup python3 /home/ubuntu/app/main.py > log.txt 2>&1 &"
